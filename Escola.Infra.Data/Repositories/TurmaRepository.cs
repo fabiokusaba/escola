@@ -1,32 +1,53 @@
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
+using Escola.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Escola.Infra.Data.Repositories;
 
-public class TurmaRepository : ITurmaRepository
+public class TurmaRepository(ApplicationDbContext context) : ITurmaRepository
 {
-    public Task<Turma> GetByIdAsync(int id)
+    private readonly ApplicationDbContext _context = context;
+    
+    public async Task<Turma> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Turma
+            .Where(t =>t.Excluido == false && t.Id == id)
+            .FirstOrDefaultAsync();
     }
 
-    public Task<List<Turma>> GetAllAsync()
+    public async Task<List<Turma>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Turma
+            .Where(t => t.Excluido == false)
+            .ToListAsync();
     }
 
-    public Task<Turma> AddAsync(Turma turma)
+    public async Task<Turma> AddAsync(Turma turma)
     {
-        throw new NotImplementedException();
+        _context.Turma.Add(turma);
+        await _context.SaveChangesAsync();
+        return turma;
     }
 
-    public Task<Turma> UpdateAsync(Turma turma)
+    public async Task<Turma> UpdateAsync(Turma turma)
     {
-        throw new NotImplementedException();
+        _context.Turma.Update(turma);
+        await _context.SaveChangesAsync();
+        return turma;
     }
 
-    public Task<Turma> DeleteAsync(int id)
+    public async Task<Turma> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var turma = await _context.Turma
+            .Where(t => t.Excluido == false && t.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (turma is null) return null;
+
+        turma.Excluido = true;
+        _context.Turma.Update(turma);
+        await _context.SaveChangesAsync();
+        return turma;
     }
 }

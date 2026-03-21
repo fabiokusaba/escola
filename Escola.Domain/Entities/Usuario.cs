@@ -8,5 +8,6 @@ public class Usuario
     public byte[] PasswordHash { get; set; } // Hash da senha criptografada
     public byte[] PasswordSalt { get; set; } // Verificação do PasswordHash
     public string Perfil { get; set; }
+    public bool Excluido { get; set; }
     public ICollection<Matricula> Matriculas { get; set; } // Relacionamento many to many
 }

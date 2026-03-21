@@ -1,32 +1,53 @@
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
+using Escola.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Escola.Infra.Data.Repositories;
 
-public class MatriculaRepository : IMatriculaRepository
+public class MatriculaRepository(ApplicationDbContext context) : IMatriculaRepository
 {
-    public Task<Matricula> GetByIdAsync(int id)
+    private readonly ApplicationDbContext _context = context;
+    
+    public async Task<Matricula> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Matricula
+            .Where(m => m.Excluido == false && m.Id == id)
+            .FirstOrDefaultAsync();
     }
 
-    public Task<List<Matricula>> GetAllAsync()
+    public async Task<List<Matricula>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Matricula
+            .Where(m => m.Excluido == false)
+            .ToListAsync();
     }
 
-    public Task<Matricula> AddAsync(Matricula matricula)
+    public async Task<Matricula> AddAsync(Matricula matricula)
     {
-        throw new NotImplementedException();
+        _context.Matricula.Add(matricula);
+        await _context.SaveChangesAsync();
+        return matricula;
     }
 
-    public Task<Matricula> UpdateAsync(Matricula matricula)
+    public async Task<Matricula> UpdateAsync(Matricula matricula)
     {
-        throw new NotImplementedException();
+        _context.Matricula.Update(matricula);
+        await _context.SaveChangesAsync();
+        return matricula;
     }
 
-    public Task<Matricula> DeleteAsync(int id)
+    public async Task<Matricula> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var matricula = await _context.Matricula
+            .Where(m => m.Excluido == false && m.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (matricula is null) return null;
+
+        matricula.Excluido = true;
+        _context.Matricula.Update(matricula);
+        await _context.SaveChangesAsync();
+        return matricula;
     }
 }

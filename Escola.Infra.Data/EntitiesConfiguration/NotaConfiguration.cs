@@ -13,8 +13,6 @@ public class NotaConfiguration : IEntityTypeConfiguration<Nota>
             .IsRequired();
         builder.Property(n => n.ValorNota)
             .IsRequired();
-        builder.Property(n => n.Aprovado)
-            .IsRequired();
         
         builder.HasOne(n => n.Matricula)
             .WithMany(m => m.Notas)

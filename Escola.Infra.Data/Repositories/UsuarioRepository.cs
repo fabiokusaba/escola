@@ -1,32 +1,53 @@
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
+using Escola.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Escola.Infra.Data.Repositories;
 
-public class UsuarioRepository : IUsuarioRepository
+public class UsuarioRepository(ApplicationDbContext context) : IUsuarioRepository
 {
-    public Task<Usuario> GetByIdAsync(int id)
+    private readonly ApplicationDbContext _context = context;
+    
+    public async Task<Usuario> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Usuario
+            .Where(u => u.Excluido == false && u.Id == id)
+            .FirstOrDefaultAsync();
     }
 
-    public Task<List<Usuario>> GetAllAsync()
+    public async Task<List<Usuario>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Usuario
+            .Where(u => u.Excluido == false)
+            .ToListAsync();
     }
 
-    public Task<Usuario> AddAsync(Usuario usuario)
+    public async Task<Usuario> AddAsync(Usuario usuario)
     {
-        throw new NotImplementedException();
+        _context.Usuario.Add(usuario);
+        await _context.SaveChangesAsync();
+        return usuario;
     }
 
-    public Task<Usuario> UpdateAsync(Usuario usuario)
+    public async Task<Usuario> UpdateAsync(Usuario usuario)
     {
-        throw new NotImplementedException();
+        _context.Usuario.Update(usuario);
+        await _context.SaveChangesAsync();
+        return usuario;
     }
 
-    public Task<Usuario> DeleteAsync(int id)
+    public async Task<Usuario> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var usuario = await _context.Usuario
+            .Where(u => u.Excluido == false && u.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (usuario is null) return null;
+
+        usuario.Excluido = true;
+        _context.Usuario.Update(usuario);
+        await _context.SaveChangesAsync();
+        return usuario;
     }
 }

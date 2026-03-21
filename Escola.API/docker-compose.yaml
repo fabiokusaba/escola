@@ -1,0 +1,16 @@
+services:
+  db:
+    container_name: escola-db
+    image: postgres:17.6
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: escola
+
+volumes:
+  db:
+    driver: local
