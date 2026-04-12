@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Escola.Application.DTOs.Usuario;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
@@ -17,8 +19,7 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
         {
             Id = usuario.Id,
             Nome = usuario.Nome,
-            Email = usuario.Email,
-            Perfil = usuario.Perfil
+            Email = usuario.Email
         };
     }
 
@@ -31,19 +32,25 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
             {
                 Id = usuario.Id,
                 Nome = usuario.Nome,
-                Email = usuario.Email,
-                Perfil = usuario.Perfil
+                Email = usuario.Email
             })
             .ToList();
     }
 
     public async Task<UsuarioGetDTO> AddAsync(UsuarioPostDTO dto)
     {
+        using var hmac = new HMACSHA512();
+        byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Senha));
+        byte[] passwordSalt = hmac.Key;
+        
         var usuario = new Usuario
         {
             Nome = dto.Nome,
             Email = dto.Email,
-            Perfil = dto.Perfil
+            Excluido = false,
+            PasswordHash = passwordHash,
+            PasswordSalt = passwordSalt,
+            Perfil = "Aluno"
         };
         
         var usuarioCriado = await repository.AddAsync(usuario);
@@ -52,29 +59,26 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
         {
             Id = usuarioCriado.Id,
             Nome = usuarioCriado.Nome,
-            Email = usuarioCriado.Email,
-            Perfil = usuarioCriado.Perfil
+            Email = usuarioCriado.Email
         };
     }
 
-    public async Task<UsuarioGetDTO> UpdateAsync(UsuarioPutDTO dto)
+    public async Task<UsuarioGetDTO> UpdateAsync(int usuarioId, UsuarioPutDTO dto)
     {
-        var usuario = new Usuario
-        {
-            Id = dto.Id,
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Perfil = dto.Perfil
-        };
+        var usuarioExiste = await repository.GetByIdAsync(usuarioId);
         
-        var usuarioAtualizado = await repository.UpdateAsync(usuario);
+        if (usuarioExiste is null) return null;
+
+        usuarioExiste.Nome = dto.Nome;
+        usuarioExiste.Email = dto.Email;
+        
+        var usuarioAtualizado = await repository.UpdateAsync(usuarioExiste);
 
         return new UsuarioGetDTO
         {
             Id = usuarioAtualizado.Id,
             Nome = usuarioAtualizado.Nome,
-            Email = usuarioAtualizado.Email,
-            Perfil = usuarioAtualizado.Perfil
+            Email = usuarioAtualizado.Email
         };
     }
 
@@ -88,8 +92,7 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
         {
             Id = usuarioRemovido.Id,
             Nome = usuarioRemovido.Nome,
-            Email = usuarioRemovido.Email,
-            Perfil = usuarioRemovido.Perfil
+            Email = usuarioRemovido.Email
         };
     }
 }

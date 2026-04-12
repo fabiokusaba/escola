@@ -45,8 +45,8 @@ public class NotaService(INotaRepository repository) : INotaService
         {
             MatriculaId = dto.MatriculaId,
             ValorNota = dto.ValorNota,
-            Aprovado = dto.Aprovado,
-            DataNota = dto.DataNota
+            Aprovado = dto.ValorNota >= 60,
+            DataNota = DateTime.UtcNow,
         };
 
         var notaCriada = await repository.AddAsync(nota);
@@ -63,16 +63,14 @@ public class NotaService(INotaRepository repository) : INotaService
 
     public async Task<NotaGetDTO> UpdateAsync(NotaPutDTO dto)
     {
-        var nota = new Nota
-        {
-            Id = dto.Id,
-            MatriculaId = dto.MatriculaId,
-            ValorNota = dto.ValorNota,
-            Aprovado = dto.Aprovado,
-            DataNota = dto.DataNota
-        };
+        var notaExistente = await repository.GetByIdAsync(dto.Id);
+
+        if (notaExistente is null) return null;
+
+        notaExistente.ValorNota = dto.ValorNota;
+        notaExistente.Aprovado = dto.ValorNota >= 60;
         
-        var notaAtualizada = await repository.UpdateAsync(nota);
+        var notaAtualizada = await repository.UpdateAsync(notaExistente);
 
         return new NotaGetDTO
         {

@@ -1,3 +1,4 @@
+using Escola.Application.DTOs.Curso;
 using Escola.Application.DTOs.Turma;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
@@ -7,34 +8,45 @@ namespace Escola.Application.Services;
 
 public class TurmaService(ITurmaRepository repository) : ITurmaService
 {
-    public async Task<TurmaGetDTO> GetByIdAsync(int id)
+    public async Task<TurmaGetDetailDTO> GetByIdAsync(int id)
     {
         var turma = await repository.GetByIdAsync(id);
 
         if (turma is null) return null;
 
-        return new TurmaGetDTO
+        return new TurmaGetDetailDTO
         {
             Id = turma.Id,
             Nome = turma.Nome,
             Descricao = turma.Descricao,
-            CursoId = turma.CursoId,
+            Curso = new CursoGetDTO
+            {
+                Id = turma.Curso.Id,
+                Nome = turma.Curso.Nome,
+                Descricao = turma.Curso.Descricao,
+            }
         };
     }
 
-    public async Task<List<TurmaGetDTO>> GetAllAsync()
+    public async Task<List<TurmaGetDetailDTO>> GetAllAsync()
     {
         var turmas = await repository.GetAllAsync();
-
-        return turmas
-            .Select(turma => new TurmaGetDTO
+        var turmaGetDetailDTO = new List<TurmaGetDetailDTO>();
+        
+        turmaGetDetailDTO.AddRange(turmas.Select(t => new TurmaGetDetailDTO
+        {
+            Id = t.Id,
+            Nome = t.Nome,
+            Descricao = t.Descricao,
+            Curso = new CursoGetDTO
             {
-                Id = turma.Id,
-                Nome = turma.Nome,
-                Descricao = turma.Descricao,
-                CursoId = turma.CursoId
-            })
-            .ToList();
+                Id = t.Curso.Id,
+                Nome = t.Curso.Nome,
+                Descricao = t.Curso.Descricao,
+            }
+        }));
+        
+        return turmaGetDetailDTO;
     }
 
     public async Task<TurmaGetDTO> AddAsync(TurmaPostDTO dto)
@@ -68,6 +80,8 @@ public class TurmaService(ITurmaRepository repository) : ITurmaService
         };
 
         var turmaAtualizada = await repository.UpdateAsync(turma);
+        
+        if (turmaAtualizada is null) return null;
 
         return new TurmaGetDTO
         {
