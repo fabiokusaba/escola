@@ -12,6 +12,7 @@ public class TurmaRepository(ApplicationDbContext context) : ITurmaRepository
     public async Task<Turma> GetByIdAsync(int id)
     {
         return await _context.Turma
+            .Include(t => t.Curso)
             .Where(t =>t.Excluido == false && t.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -19,6 +20,7 @@ public class TurmaRepository(ApplicationDbContext context) : ITurmaRepository
     public async Task<List<Turma>> GetAllAsync()
     {
         return await _context.Turma
+            .Include(t => t.Curso)
             .Where(t => t.Excluido == false)
             .ToListAsync();
     }
