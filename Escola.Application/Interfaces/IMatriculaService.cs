@@ -4,9 +4,9 @@ namespace Escola.Application.Interfaces;
 
 public interface IMatriculaService
 {
-    Task<MatriculaGetDTO> GetByIdAsync(int id);
-    Task<List<MatriculaGetDTO>> GetAllAsync();
-    Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO matricula);
-    Task<MatriculaGetDTO> UpdateAsync(MatriculaPutDTO matricula);
+    Task<MatriculaGetDetailDTO> GetByIdAsync(int id);
+    Task<List<MatriculaGetDetailDTO>> GetAllAsync();
+    Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO matriculaPostDto);
+    Task<MatriculaGetDTO> UpdateAsync(MatriculaPutDTO matriculaPutDto);
     Task<MatriculaGetDTO> DeleteAsync(int id);
 }

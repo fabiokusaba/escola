@@ -4,9 +4,9 @@ namespace Escola.Application.Interfaces;
 
 public interface ITurmaService
 {
-    Task<TurmaGetDTO> GetByIdAsync(int id);
+    Task<TurmaGetDetailDTO> GetByIdAsync(int id);
     Task<List<TurmaGetDTO>> GetAllAsync();
-    Task<TurmaGetDTO> AddAsync(TurmaPostDTO turma);
-    Task<TurmaGetDTO> UpdateAsync(TurmaPutDTO turma);
+    Task<TurmaGetDTO> AddAsync(TurmaPostDTO turmaPostDto);
+    Task<TurmaGetDTO> UpdateAsync(TurmaPutDTO turmaPutDto);
     Task<TurmaGetDTO> DeleteAsync(int id);
 }

@@ -6,7 +6,7 @@ public interface IUsuarioService
 {
     Task<UsuarioGetDTO> GetByIdAsync(int id);
     Task<List<UsuarioGetDTO>> GetAllAsync();
-    Task<UsuarioGetDTO> AddAsync(UsuarioPostDTO usuario);
-    Task<UsuarioGetDTO> UpdateAsync(UsuarioPutDTO usuario);
+    Task<UsuarioGetDTO> AddAsync(UsuarioPostDTO usuarioPostDto);
+    Task<UsuarioGetDTO> UpdateAsync(int usuarioId, UsuarioPutDTO usuarioPutDto);
     Task<UsuarioGetDTO> DeleteAsync(int id);
 }
