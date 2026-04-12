@@ -1,18 +1,19 @@
 using Escola.Application.DTOs.Curso;
 using Escola.Application.DTOs.Turma;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
 
 namespace Escola.Application.Services;
 
-public class TurmaService(ITurmaRepository repository) : ITurmaService
+public class TurmaService(ITurmaRepository repository, ICursoRepository cursoRepository) : ITurmaService
 {
     public async Task<TurmaGetDetailDTO> GetByIdAsync(int id)
     {
         var turma = await repository.GetByIdAsync(id);
 
-        if (turma is null) return null;
+        if (turma is null) throw new NotFoundException("Turma não encontrada");
 
         return new TurmaGetDetailDTO
         {
@@ -51,6 +52,10 @@ public class TurmaService(ITurmaRepository repository) : ITurmaService
 
     public async Task<TurmaGetDTO> AddAsync(TurmaPostDTO dto)
     {
+        var curso = await cursoRepository.GetByIdAsync(dto.CursoId);
+
+        if (curso is null) throw new NotFoundException("Curso não  encontrado");
+        
         var turma = new Turma
         {
             Nome = dto.Nome,
@@ -71,17 +76,22 @@ public class TurmaService(ITurmaRepository repository) : ITurmaService
 
     public async Task<TurmaGetDTO> UpdateAsync(TurmaPutDTO dto)
     {
-        var turma = new Turma
-        {
-            Id = dto.Id,
-            Nome = dto.Nome,
-            Descricao = dto.Descricao,
-            CursoId = dto.CursoId
-        };
+        var turma = await  repository.GetByIdAsync(dto.Id);
 
+        if (turma is null) throw new NotFoundException("Turma não encontrada");
+        
+        var curso = await cursoRepository.GetByIdAsync(dto.CursoId);
+
+        if (curso is null) throw new NotFoundException("Curso não encontrado");
+        
+        turma.Id = dto.Id;
+        turma.Nome = dto.Nome;
+        turma.Descricao = dto.Descricao;
+        turma.CursoId = dto.CursoId;
+        
         var turmaAtualizada = await repository.UpdateAsync(turma);
         
-        if (turmaAtualizada is null) return null;
+        if (turmaAtualizada is null) throw new BadRequestException("Ocorreu um erro ao atualizar a turma");
 
         return new TurmaGetDTO
         {
@@ -96,7 +106,7 @@ public class TurmaService(ITurmaRepository repository) : ITurmaService
     {
         var turmaRemovida = await repository.DeleteAsync(id);
 
-        if (turmaRemovida is null) return null;
+        if (turmaRemovida is null) throw new NotFoundException("Turma não encontrada");
 
         return new TurmaGetDTO
         {

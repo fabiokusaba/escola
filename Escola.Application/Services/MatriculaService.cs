@@ -1,19 +1,20 @@
 using Escola.Application.DTOs.Matricula;
 using Escola.Application.DTOs.Turma;
 using Escola.Application.DTOs.Usuario;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
 
 namespace Escola.Application.Services;
 
-public class MatriculaService(IMatriculaRepository repository) : IMatriculaService
+public class MatriculaService(IMatriculaRepository repository, ITurmaRepository turmaRepository, IUsuarioRepository usuarioRepository) : IMatriculaService
 {
     public async Task<MatriculaGetDetailDTO> GetByIdAsync(int id)
     {
         var matricula = await repository.GetByIdAsync(id);
 
-        if (matricula is null) return null;
+        if (matricula is null) throw new NotFoundException("Matrícula não encontrada");
 
         return new MatriculaGetDetailDTO
         {
@@ -66,6 +67,15 @@ public class MatriculaService(IMatriculaRepository repository) : IMatriculaServi
 
     public async Task<MatriculaGetDTO> AddAsync(MatriculaPostDTO dto)
     {
+        var turma = await turmaRepository.GetByIdAsync(dto.TurmaId);
+
+        if (turma is null) throw new NotFoundException("Turma não encontrada");
+
+        var usuario = await usuarioRepository.GetByIdAsync(dto.UsuarioId);
+
+        if (usuario is null) throw new NotFoundException("Usuário não encontrado");
+        
+        
         var matricula = new Matricula
         {
             UsuarioId = dto.UsuarioId,
@@ -76,6 +86,8 @@ public class MatriculaService(IMatriculaRepository repository) : IMatriculaServi
         };
         
         var matriculaCriada = await repository.AddAsync(matricula);
+
+        if (matriculaCriada is null) throw new BadRequestException("Ocorreu um erro ao criar a matrícula");
 
         return new MatriculaGetDTO
         {
@@ -90,6 +102,10 @@ public class MatriculaService(IMatriculaRepository repository) : IMatriculaServi
 
     public async Task<MatriculaGetDTO> UpdateAsync(MatriculaPutDTO dto)
     {
+        var turma = await turmaRepository.GetByIdAsync(dto.TurmaId);
+
+        if (turma is null) throw new NotFoundException("Turma não encontrado");
+        
         var matricula = new Matricula
         {
             Id = dto.Id,
@@ -99,7 +115,7 @@ public class MatriculaService(IMatriculaRepository repository) : IMatriculaServi
         
         var matriculaAtualizada = await repository.UpdateAsync(matricula);
 
-        if (matriculaAtualizada is null) return null;
+        if (matriculaAtualizada is null) throw new BadRequestException("Ocorreu um erro ao atualizar a matrícula");
 
         return new MatriculaGetDTO
         {
@@ -116,7 +132,7 @@ public class MatriculaService(IMatriculaRepository repository) : IMatriculaServi
     {
         var matriculaRemovida = await repository.DeleteAsync(id);
 
-        if (matriculaRemovida is null) return null;
+        if (matriculaRemovida is null) throw new NotFoundException("Matrícula não encontrada");
 
         return new MatriculaGetDTO
         {

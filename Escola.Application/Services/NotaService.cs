@@ -1,4 +1,5 @@
 using Escola.Application.DTOs.Nota;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -11,7 +12,7 @@ public class NotaService(INotaRepository repository) : INotaService
     {
         var nota = await repository.GetByIdAsync(id);
 
-        if (nota is null) return null;
+        if (nota is null) throw new NotFoundException("Nota não encontrada");
 
         return new NotaGetDTO
         {
@@ -50,6 +51,8 @@ public class NotaService(INotaRepository repository) : INotaService
         };
 
         var notaCriada = await repository.AddAsync(nota);
+        
+        if (notaCriada is null) throw new BadRequestException("Ocorreu um erro ao criar a nota");
 
         return new NotaGetDTO
         {
@@ -65,12 +68,14 @@ public class NotaService(INotaRepository repository) : INotaService
     {
         var notaExistente = await repository.GetByIdAsync(dto.Id);
 
-        if (notaExistente is null) return null;
+        if (notaExistente is null) throw new NotFoundException("Nota não encontrada");
 
         notaExistente.ValorNota = dto.ValorNota;
         notaExistente.Aprovado = dto.ValorNota >= 60;
         
         var notaAtualizada = await repository.UpdateAsync(notaExistente);
+
+        if (notaAtualizada is null) throw new BadRequestException("Ocorreu um erro ao atualizar a nota");
 
         return new NotaGetDTO
         {
@@ -86,7 +91,7 @@ public class NotaService(INotaRepository repository) : INotaService
     {
         var notaRemovida = await repository.DeleteAsync(id);
 
-        if (notaRemovida is null) return null;
+        if (notaRemovida is null) throw new NotFoundException("Nota não encontrada");
 
         return new NotaGetDTO
         {

@@ -1,4 +1,5 @@
 using Escola.Application.DTOs.Curso;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -11,7 +12,7 @@ public class CursoService(ICursoRepository repository) : ICursoService
     {
         var curso = await repository.GetByIdAsync(id);
         
-        if (curso is null) return null;
+        if (curso is null) throw new NotFoundException("Curso não encontrado");
 
         return new CursoGetDTO
         {
@@ -40,6 +41,8 @@ public class CursoService(ICursoRepository repository) : ICursoService
 
         var cursoCriado = await repository.AddAsync(curso);
 
+        if (cursoCriado is null) throw new BadRequestException("Ocorreu um erro ao criar o curso");
+
         return new CursoGetDTO
         {
             Id = cursoCriado.Id,
@@ -50,16 +53,17 @@ public class CursoService(ICursoRepository repository) : ICursoService
 
     public async Task<CursoGetDTO> UpdateAsync(CursoPutDTO dto)
     {
-        var curso = new Curso
-        {
-            Id = dto.Id,
-            Nome = dto.Nome,
-            Descricao = dto.Descricao
-        };
+        var curso = await  repository.GetByIdAsync(dto.Id);
+
+        if (curso is null) throw new NotFoundException("Curso não encontrado");
+        
+        curso.Id = dto.Id;
+        curso.Nome = dto.Nome;
+        curso.Descricao = dto.Descricao;
         
         var cursoAtualizado = await repository.UpdateAsync(curso);
         
-        if (cursoAtualizado is null) return null;
+        if (cursoAtualizado is null) throw new BadRequestException("Ocorreu um erro ao atualizar o curso");
 
         return new CursoGetDTO
         {
@@ -73,7 +77,7 @@ public class CursoService(ICursoRepository repository) : ICursoService
     {
         var cursoRemovido = await repository.DeleteAsync(id);
 
-        if (cursoRemovido is null) return null;
+        if (cursoRemovido is null) throw new NotFoundException("Curso não encontrado");
 
         return new CursoGetDTO
         {
