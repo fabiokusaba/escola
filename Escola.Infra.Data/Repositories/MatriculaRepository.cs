@@ -12,6 +12,8 @@ public class MatriculaRepository(ApplicationDbContext context) : IMatriculaRepos
     public async Task<Matricula> GetByIdAsync(int id)
     {
         return await _context.Matricula
+            .Include(m => m.Usuario)
+            .Include(m => m.Turma)
             .Where(m => m.Excluido == false && m.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -19,6 +21,8 @@ public class MatriculaRepository(ApplicationDbContext context) : IMatriculaRepos
     public async Task<List<Matricula>> GetAllAsync()
     {
         return await _context.Matricula
+            .Include(m => m.Usuario)
+            .Include(m => m.Turma)
             .Where(m => m.Excluido == false)
             .ToListAsync();
     }
