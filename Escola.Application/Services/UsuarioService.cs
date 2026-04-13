@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Escola.Application.DTOs.Usuario;
+using Escola.Application.Exceptions;
 using Escola.Application.Interfaces;
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
@@ -13,13 +14,14 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
     {
         var usuario = await repository.GetByIdAsync(id);
 
-        if (usuario is null) return null;
+        if (usuario is null) throw new NotFoundException("Usuário não encontrado");
 
         return new UsuarioGetDTO
         {
             Id = usuario.Id,
             Nome = usuario.Nome,
-            Email = usuario.Email
+            Email = usuario.Email,
+            Perfil = usuario.Perfil
         };
     }
 
@@ -32,7 +34,8 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
             {
                 Id = usuario.Id,
                 Nome = usuario.Nome,
-                Email = usuario.Email
+                Email = usuario.Email,
+                Perfil = usuario.Perfil
             })
             .ToList();
     }
@@ -43,6 +46,8 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
         byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Senha));
         byte[] passwordSalt = hmac.Key;
         
+        var existeUsuario = await repository.ExisteUsuarioAsync();
+        
         var usuario = new Usuario
         {
             Nome = dto.Nome,
@@ -50,16 +55,19 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
             Excluido = false,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
-            Perfil = "Aluno"
+            Perfil = existeUsuario ? "Aluno" : "Administrador"
         };
         
         var usuarioCriado = await repository.AddAsync(usuario);
+
+        if (usuarioCriado is null) throw new BadRequestException("Ocorreu um erro ao cadastrar o usuário");
 
         return new UsuarioGetDTO
         {
             Id = usuarioCriado.Id,
             Nome = usuarioCriado.Nome,
-            Email = usuarioCriado.Email
+            Email = usuarioCriado.Email,
+            Perfil = usuarioCriado.Perfil
         };
     }
 
@@ -67,18 +75,21 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
     {
         var usuarioExiste = await repository.GetByIdAsync(usuarioId);
         
-        if (usuarioExiste is null) return null;
+        if (usuarioExiste is null) throw new NotFoundException("Usuário não encontrado");
 
         usuarioExiste.Nome = dto.Nome;
         usuarioExiste.Email = dto.Email;
         
         var usuarioAtualizado = await repository.UpdateAsync(usuarioExiste);
 
+        if (usuarioAtualizado is null) throw new BadRequestException("Ocorreu um erro ao atualizar o usuário");
+
         return new UsuarioGetDTO
         {
             Id = usuarioAtualizado.Id,
             Nome = usuarioAtualizado.Nome,
-            Email = usuarioAtualizado.Email
+            Email = usuarioAtualizado.Email,
+            Perfil = usuarioAtualizado.Perfil
         };
     }
 
@@ -86,13 +97,19 @@ public class UsuarioService(IUsuarioRepository repository) : IUsuarioService
     {
         var usuarioRemovido = await repository.DeleteAsync(id);
 
-        if (usuarioRemovido is null) return null;
+        if (usuarioRemovido is null) throw new NotFoundException("Usuário não encontrado");
 
         return new UsuarioGetDTO
         {
             Id = usuarioRemovido.Id,
             Nome = usuarioRemovido.Nome,
-            Email = usuarioRemovido.Email
+            Email = usuarioRemovido.Email,
+            Perfil = usuarioRemovido.Perfil
         };
+    }
+
+    public async Task<bool> ExisteUsuarioAsync()
+    {
+        return await repository.ExisteUsuarioAsync();
     }
 }

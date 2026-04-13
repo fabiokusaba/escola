@@ -1,11 +1,16 @@
+using System.Text;
 using Escola.Application.Interfaces;
 using Escola.Application.Services;
+using Escola.Domain.Account;
 using Escola.Domain.Interfaces;
 using Escola.Infra.Data.Context;
+using Escola.Infra.Data.Identity;
 using Escola.Infra.Data.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Escola.Infra.Ioc;
 
@@ -19,6 +24,26 @@ public static class DependencyInjection
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
         });
 
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                
+                ValidIssuer = configuration["JWT:Issuer"],
+                ValidAudience = configuration["JWT:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"])),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
         services.AddScoped<ICursoRepository, CursoRepository>();
         services.AddScoped<IMatriculaRepository, MatriculaRepository>();
         services.AddScoped<INotaRepository, NotaRepository>();
@@ -30,6 +55,7 @@ public static class DependencyInjection
         services.AddScoped<INotaService, NotaService>();
         services.AddScoped<ITurmaService, TurmaService>();
         services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IAuthenticate, AuthenticateService>();
 
         return services;
     }

@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Escola.Infra.Data\Escola.Infra.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+    </ItemGroup>
+
 </Project>

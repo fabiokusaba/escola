@@ -9,4 +9,5 @@ public interface IUsuarioService
     Task<UsuarioGetDTO> AddAsync(UsuarioPostDTO usuarioPostDto);
     Task<UsuarioGetDTO> UpdateAsync(int usuarioId, UsuarioPutDTO usuarioPutDto);
     Task<UsuarioGetDTO> DeleteAsync(int id);
+    Task<bool> ExisteUsuarioAsync();
 }

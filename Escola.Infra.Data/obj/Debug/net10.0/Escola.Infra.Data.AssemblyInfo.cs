@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Escola.Infra.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46cc22b27618882976a116d4addf574b156b5495")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aad5267d787a6a390cb6e87639e987732d51f2f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Escola.Infra.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Escola.Infra.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

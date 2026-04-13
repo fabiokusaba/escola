@@ -50,4 +50,9 @@ public class UsuarioRepository(ApplicationDbContext context) : IUsuarioRepositor
         await _context.SaveChangesAsync();
         return usuario;
     }
+
+    public async Task<bool> ExisteUsuarioAsync()
+    {
+        return await _context.Usuario.AnyAsync(u => u.Excluido == false);
+    }
 }
