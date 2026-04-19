@@ -7,7 +7,11 @@ using Escola.Domain.Interfaces;
 
 namespace Escola.Application.Services;
 
-public class TurmaService(ITurmaRepository repository, ICursoRepository cursoRepository) : ITurmaService
+public class TurmaService(
+    ITurmaRepository repository, 
+    ICursoRepository cursoRepository, 
+    IUsuarioRepository usuarioRepository
+    ) : ITurmaService
 {
     public async Task<TurmaGetDetailDTO> GetByIdAsync(int id)
     {
@@ -115,5 +119,30 @@ public class TurmaService(ITurmaRepository repository, ICursoRepository cursoRep
             Descricao = turmaRemovida.Descricao,
             CursoId = turmaRemovida.CursoId
         };
+    }
+
+    public async Task<List<TurmaGetDetailDTO>> GetTurmasByUsuario(int usuarioId)
+    {
+        var usuario = await usuarioRepository.GetByIdAsync(usuarioId);
+        
+        if (usuario is null) throw new NotFoundException("Usuário não encontrado");
+        
+        var turmas = await repository.GetTurmasByUsuario(usuarioId);
+        var turmaGetDetailDTO = new List<TurmaGetDetailDTO>();
+        
+        turmaGetDetailDTO.AddRange(turmas.Select(t => new TurmaGetDetailDTO
+        {
+            Id = t.Id,
+            Nome = t.Nome,
+            Descricao = t.Descricao,
+            Curso = new CursoGetDTO
+            {
+                Id = t.Curso.Id,
+                Nome = t.Curso.Nome,
+                Descricao = t.Curso.Descricao
+            }
+        }));
+
+        return turmaGetDetailDTO;
     }
 }

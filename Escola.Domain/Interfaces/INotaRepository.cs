@@ -4,6 +4,7 @@ namespace Escola.Domain.Interfaces;
 
 public interface INotaRepository
 {
+    Task<List<Nota>> GetNotasByTurmaUsuario(int turmaId, int usuarioId);
     Task<Nota> GetByIdAsync(int id);
     Task<List<Nota>> GetAllAsync();
     Task<Nota> AddAsync(Nota matricula);

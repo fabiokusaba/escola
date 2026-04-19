@@ -7,11 +7,17 @@ namespace Escola.Infra.Data.Repositories;
 
 public class TurmaRepository(ApplicationDbContext context) : ITurmaRepository
 {
-    private readonly ApplicationDbContext _context = context;
-    
+    public async Task<List<Turma>> GetTurmasByUsuario(int usuarioId)
+    {
+        return await context.Turma
+            .Include(t => t.Curso)
+            .Where(t => t.Excluido == false && t.Matriculas.Any(m => m.UsuarioId == usuarioId))
+            .ToListAsync();
+    }
+
     public async Task<Turma> GetByIdAsync(int id)
     {
-        return await _context.Turma
+        return await context.Turma
             .Include(t => t.Curso)
             .Where(t =>t.Excluido == false && t.Id == id)
             .FirstOrDefaultAsync();
@@ -19,7 +25,7 @@ public class TurmaRepository(ApplicationDbContext context) : ITurmaRepository
 
     public async Task<List<Turma>> GetAllAsync()
     {
-        return await _context.Turma
+        return await context.Turma
             .Include(t => t.Curso)
             .Where(t => t.Excluido == false)
             .ToListAsync();
@@ -27,29 +33,29 @@ public class TurmaRepository(ApplicationDbContext context) : ITurmaRepository
 
     public async Task<Turma> AddAsync(Turma turma)
     {
-        _context.Turma.Add(turma);
-        await _context.SaveChangesAsync();
+        context.Turma.Add(turma);
+        await context.SaveChangesAsync();
         return turma;
     }
 
     public async Task<Turma> UpdateAsync(Turma turma)
     {
-        _context.Turma.Update(turma);
-        await _context.SaveChangesAsync();
+        context.Turma.Update(turma);
+        await context.SaveChangesAsync();
         return turma;
     }
 
     public async Task<Turma> DeleteAsync(int id)
     {
-        var turma = await _context.Turma
+        var turma = await context.Turma
             .Where(t => t.Excluido == false && t.Id == id)
             .FirstOrDefaultAsync();
 
         if (turma is null) return null;
 
         turma.Excluido = true;
-        _context.Turma.Update(turma);
-        await _context.SaveChangesAsync();
+        context.Turma.Update(turma);
+        await context.SaveChangesAsync();
         return turma;
     }
 }

@@ -102,4 +102,21 @@ public class NotaService(INotaRepository repository) : INotaService
             ValorNota = notaRemovida.ValorNota
         };
     }
+
+    public async Task<List<NotaGetDTO>> GetNotasByTurmaUsuario(int turmaId, int usuarioId)
+    {
+        var notas = await repository.GetNotasByTurmaUsuario(turmaId, usuarioId);
+        var notaDTO = new List<NotaGetDTO>();
+        
+        notaDTO.AddRange(notas.Select(n => new NotaGetDTO
+        {
+            Id = n.Id,
+            MatriculaId = n.MatriculaId,
+            ValorNota = n.ValorNota,
+            Aprovado = n.Aprovado,
+            DataNota = n.DataNota
+        }));
+        
+        return notaDTO;
+    }
 }
