@@ -3003,33 +3003,33 @@
     ]
   },
   "packageFolders": {
-    "/home/fabiokusaba/.nuget/packages/": {}
+    "/Users/fabiokusaba/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/fabiokusaba/RiderProjects/Escola/Escola.API/Escola.API.csproj",
+      "projectUniqueName": "/Users/fabiokusaba/Developer/escola/Escola.API/Escola.API.csproj",
       "projectName": "Escola.API",
-      "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.API/Escola.API.csproj",
-      "packagesPath": "/home/fabiokusaba/.nuget/packages/",
-      "outputPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.API/obj/",
+      "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.API/Escola.API.csproj",
+      "packagesPath": "/Users/fabiokusaba/.nuget/packages/",
+      "outputPath": "/Users/fabiokusaba/Developer/escola/Escola.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/fabiokusaba/.nuget/NuGet/NuGet.Config"
+        "/Users/fabiokusaba/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
+        "/opt/homebrew/Cellar/dotnet/10.0.107/libexec/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj": {
-              "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj"
+            "/Users/fabiokusaba/Developer/escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj": {
+              "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj"
             }
           }
         }
@@ -3084,7 +3084,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.106/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/10.0.107/libexec/sdk/10.0.107/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

@@ -1,26 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/Escola.Domain.csproj": {}
+    "/Users/fabiokusaba/Developer/escola/Escola.Domain/Escola.Domain.csproj": {}
   },
   "projects": {
-    "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/Escola.Domain.csproj": {
+    "/Users/fabiokusaba/Developer/escola/Escola.Domain/Escola.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/Escola.Domain.csproj",
+        "projectUniqueName": "/Users/fabiokusaba/Developer/escola/Escola.Domain/Escola.Domain.csproj",
         "projectName": "Escola.Domain",
-        "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/Escola.Domain.csproj",
-        "packagesPath": "/home/fabiokusaba/.nuget/packages/",
-        "outputPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/obj/",
+        "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.Domain/Escola.Domain.csproj",
+        "packagesPath": "/Users/fabiokusaba/.nuget/packages/",
+        "outputPath": "/Users/fabiokusaba/Developer/escola/Escola.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/fabiokusaba/.nuget/NuGet/NuGet.Config"
+          "/Users/fabiokusaba/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "/usr/lib/dotnet/library-packs": {},
+          "/opt/homebrew/Cellar/dotnet/10.0.107/libexec/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -60,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.106/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/10.0.107/libexec/sdk/10.0.107/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

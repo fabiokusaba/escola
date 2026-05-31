@@ -1,3 +1,5 @@
+using Escola.API.Extensions;
+using Escola.API.Models;
 using Escola.Application.DTOs.Curso;
 using Escola.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -39,9 +41,14 @@ public class CursoController(ICursoService cursoService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCursos()
+    public async Task<IActionResult> GetCursos([FromQuery] PaginationParams paginationParams)
     {
-        var cursos = await cursoService.GetAllAsync();
+        var cursos = await cursoService
+            .GetAllAsync(paginationParams.PageNumber, paginationParams.PageSize);
+        Response.AddPaginationHeader(
+            new PaginationHeader(paginationParams.PageNumber, 
+                paginationParams.PageSize, cursos.TotalCount, cursos.TotalPages)
+            );
         return Ok(cursos);
     }
 }

@@ -1060,39 +1060,39 @@
     ]
   },
   "packageFolders": {
-    "/home/fabiokusaba/.nuget/packages/": {}
+    "/Users/fabiokusaba/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj",
+      "projectUniqueName": "/Users/fabiokusaba/Developer/escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj",
       "projectName": "Escola.Infra.Ioc",
-      "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj",
-      "packagesPath": "/home/fabiokusaba/.nuget/packages/",
-      "outputPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Ioc/obj/",
+      "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.Infra.Ioc/Escola.Infra.Ioc.csproj",
+      "packagesPath": "/Users/fabiokusaba/.nuget/packages/",
+      "outputPath": "/Users/fabiokusaba/Developer/escola/Escola.Infra.Ioc/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/fabiokusaba/.nuget/NuGet/NuGet.Config"
+        "/Users/fabiokusaba/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
+        "/opt/homebrew/Cellar/dotnet/10.0.107/libexec/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/home/fabiokusaba/RiderProjects/Escola/Escola.Application/Escola.Application.csproj": {
-              "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Application/Escola.Application.csproj"
+            "/Users/fabiokusaba/Developer/escola/Escola.Application/Escola.Application.csproj": {
+              "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.Application/Escola.Application.csproj"
             },
-            "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/Escola.Domain.csproj": {
-              "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Domain/Escola.Domain.csproj"
+            "/Users/fabiokusaba/Developer/escola/Escola.Domain/Escola.Domain.csproj": {
+              "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.Domain/Escola.Domain.csproj"
             },
-            "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Data/Escola.Infra.Data.csproj": {
-              "projectPath": "/home/fabiokusaba/RiderProjects/Escola/Escola.Infra.Data/Escola.Infra.Data.csproj"
+            "/Users/fabiokusaba/Developer/escola/Escola.Infra.Data/Escola.Infra.Data.csproj": {
+              "projectPath": "/Users/fabiokusaba/Developer/escola/Escola.Infra.Data/Escola.Infra.Data.csproj"
             }
           }
         }
@@ -1134,7 +1134,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.106/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/10.0.107/libexec/sdk/10.0.107/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

@@ -1,6 +1,8 @@
 using Escola.Domain.Entities;
 using Escola.Domain.Interfaces;
+using Escola.Domain.Pagination;
 using Escola.Infra.Data.Context;
+using Escola.Infra.Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Escola.Infra.Data.Repositories;
@@ -16,11 +18,10 @@ public class CursoRepository(ApplicationDbContext context) : ICursoRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<List<Curso>> GetAllAsync()
+    public async Task<PagedList<Curso>> GetAllAsync(int pageNumber, int pageSize)
     {
-        return await _context.Curso
-            .Where(c => c.Excluido == false)
-            .ToListAsync();
+        var query = _context.Curso.Where(c => c.Excluido == false).AsNoTracking();
+        return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
     }
 
     public async Task<Curso> AddAsync(Curso curso)
